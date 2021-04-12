@@ -7,7 +7,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
@@ -52,6 +55,17 @@ public class TestBase extends AbstractTestNGCucumberTests {
 			String path=System.getProperty("user.dir")+"//drivers//geckodriver.exe";
 			System.setProperty("webdriver.gecko.driver", path);
 		    driver=new FirefoxDriver();
+		}
+		
+		else if(browserName.equalsIgnoreCase("headless"))
+		{
+			String path=System.getProperty("user.dir")+"//drivers//phantomjs.exe";
+			DesiredCapabilities caps=new DesiredCapabilities();
+			caps.setJavascriptEnabled(true);
+			caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, path);
+			String[] phantomJSargs= {"--web-security=no","--ignore-ssl-errors=yes"};
+			caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, phantomJSargs);
+			driver=new PhantomJSDriver(caps);
 		}
 		
 	    driver.manage().window().maximize();
